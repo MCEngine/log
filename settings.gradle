@@ -1,0 +1,16 @@
+// Set the root project name
+rootProject.name = 'mcengine-log'
+
+// Define base directories for subprojects
+
+// Core projects that provide essential functionality shared across multiple implementations
+def coreProjects = ['mcengine-log-api', 'common']
+
+// Server-specific implementations (e.g., SpigotMC)
+def serverProjects = ['spigotmc']
+
+// Include core projects in the build
+coreProjects.each { include it }
+
+// Dynamically include server projects under the 'server' directory structure
+serverProjects.each { include "server:${it}" }

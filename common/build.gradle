@@ -1,0 +1,19 @@
+// Apply the Java plugin, which is required for building Java applications
+plugins {
+    id 'java'
+}
+
+// Define the project dependencies
+dependencies {
+    // Add the Spigot API as a compile-time dependency
+    // 'compileOnly' means the dependency is only required during compilation,
+    // but it will not be included in the final JAR file.
+    compileOnly 'org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT'
+}
+
+// Configure the Shadow plugin to create a fat JAR (if the Shadow plugin is applied elsewhere)
+// This block sets the archive name for the generated JAR file.
+shadowJar {
+    // Define the base name of the output JAR file
+    archiveBaseName = 'MCEngineLog-Common'
+}

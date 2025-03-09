@@ -1,0 +1,6 @@
+name: MCEngineLog
+version: ${version}
+main: io.github.mcengine.spigotmc.log.MCEngineLog
+author: MCEngine
+description: MCEngine Log
+api-version: 1.18

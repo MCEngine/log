@@ -1,0 +1,27 @@
+// Apply the Java Library plugin, which extends the Java plugin
+// and is useful for creating libraries with API and implementation separation.
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    // Add the Spigot API as a compile-time dependency
+    // 'compileOnly' means the dependency is only required during compilation,
+    // but it will not be included in the final JAR file.
+    compileOnly 'org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT'
+    
+    // SQLite JDBC dependency for database interactions
+    // Used for SQLite database connections in the plugin.
+    compileOnly 'org.xerial:sqlite-jdbc:3.47.1.0'
+    
+    // MySQL JDBC dependency for database interactions
+    // Provides MySQL database connectivity for the plugin.
+    compileOnly 'mysql:mysql-connector-java:8.0.33'    
+}
+
+// Configure the Shadow plugin to create a fat JAR (if the Shadow plugin is applied elsewhere)
+// This block sets the archive name for the generated JAR file.
+shadowJar {
+    // Define the base name of the output JAR file
+    archiveBaseName = 'MCEngineLog-Api'
+}
