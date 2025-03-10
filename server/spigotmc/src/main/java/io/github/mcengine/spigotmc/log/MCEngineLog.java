@@ -13,7 +13,9 @@ public class MCEngineLog extends JavaPlugin {
      * This method is executed when the server starts or when the plugin is reloaded.
      */
     @Override
-    public void onEnable() {}
+    public void onEnable() {
+        saveDefaultConfig();
+    }
 
     /**
      * Called when the plugin is disabled.
