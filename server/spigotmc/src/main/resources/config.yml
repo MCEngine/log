@@ -1,0 +1,12 @@
+dbType: sqlite
+
+mysql:
+  host: localhost
+  port: 3306
+  ssl: false
+  database: logs
+  username: root
+  password:
+
+sqlite:
+  path: logs.db
