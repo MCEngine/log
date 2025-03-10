@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
@@ -37,6 +38,35 @@ public class MCEngineLogSQLite {
             System.err.println("Failed to connect to SQLite database: " + e.getMessage());
         }
         return connection;
+    }
+
+    /**
+     * Creates the necessary database tables if they do not exist.
+     */
+    public void initialize() {
+        if (!isConnected()) {
+            connect();
+        }
+        
+        if (connection == null) {
+            plugin.getLogger().severe("Database connection is null, initialization failed.");
+            return;
+        }
+
+        String sql = "CREATE TABLE IF NOT EXISTS logs (" +
+                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                     "uuid_player VARCHAR(36), " +
+                     "type TEXT, " +
+                     "message TEXT, " +
+                     "timestamp TEXT)";
+
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(sql);
+            plugin.getLogger().info("Database initialized successfully.");
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error initializing database: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**
