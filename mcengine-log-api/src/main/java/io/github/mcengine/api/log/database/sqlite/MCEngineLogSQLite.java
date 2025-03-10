@@ -28,7 +28,7 @@ public class MCEngineLogSQLite {
         FileConfiguration config = plugin.getConfig();
         
         // Retrieves the database file path from the configuration, defaulting to "logs.sqlite".
-        this.dbPath = config.getString("dbPath", "logs.sqlite");
+        this.dbPath = config.getString("sqlite.path", "logs.sqlite");
     }
 
     /**
