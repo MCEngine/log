@@ -1,6 +1,5 @@
-package io.github.mcengine.api.log.database.sqlite;
+package io.github.mcengine.api.log.database.mysql;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,41 +8,46 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
 /**
- * The {@code MCEngineLogSQLite} handles SQLite database operations for logging.
+ * The {@code MCEngineLogMySQL} handles MySQL database operations for logging.
  */
-public class MCEngineLogSQLite {
+public class MCEngineLogMySQL {
 
     private Plugin plugin;
-    private String dbPath;
+    private String host, port, ssl, database, username, password;
     private Connection connection;
 
     /**
-     * Constructs an instance of MCEngineLogSQLite.
-     * This initializes the SQLite database configuration using the plugin's config file.
+     * Constructs an instance of MCEngineLogMySQL.
+     * This initializes the MySQL database configuration using the plugin's config file.
      * 
      * @param plugin The plugin instance used to retrieve configuration settings.
      */
-    public MCEngineLogSQLite(Plugin plugin) {
+    public MCEngineLogMySQL(Plugin plugin) {
         this.plugin = plugin;
         FileConfiguration config = plugin.getConfig();
-        
-        // Retrieves the database file path from the configuration, defaulting to "logs.sqlite".
-        this.dbPath = config.getString("dbPath", "logs.sqlite");
+
+        // Retrieves MySQL database connection details from the configuration file.
+        this.host = config.getString("mysql.host", "localhost");     // Default: localhost
+        this.port = config.getString("mysql.port", "3306");          // Default: 3306
+        this.ssl = config.getString("mysql.ssl", "false");           // Default: false (No SSL)
+        this.database = config.getString("mysql.database", "logs");  // Default: logs
+        this.username = config.getString("mysql.username", "root");  // Default: root
+        this.password = config.getString("mysql.password", "");      // Default: empty password
     }
 
     /**
-     * Establishes a connection to the SQLite database.
+     * Establishes a connection to the MySQL database.
      * @return Connection object or null if the connection fails.
      */
     public Connection connect() {
         try {
             if (connection == null || connection.isClosed()) {
-                File databaseFile = new File(plugin.getDataFolder(), dbPath);
-                connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile.getAbsolutePath());
-                System.out.println("Connected to SQLite database: " + databaseFile.getAbsolutePath());
+                String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=" + ssl + "&autoReconnect=true";
+                connection = DriverManager.getConnection(url, username, password);
+                System.out.println("Connected to MySQL database: " + database);
             }
         } catch (SQLException e) {
-            System.err.println("Failed to connect to SQLite database: " + e.getMessage());
+            System.err.println("Failed to connect to MySQL database: " + e.getMessage());
         }
         return connection;
     }
@@ -62,11 +66,11 @@ public class MCEngineLogSQLite {
         }
 
         String sql = "CREATE TABLE IF NOT EXISTS logs (" +
-                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
                      "uuid_player VARCHAR(36), " +
                      "type TEXT, " +
                      "message TEXT, " +
-                     "timestamp TEXT)";
+                     "timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
 
         try (Statement stmt = connection.createStatement()) {
             stmt.executeUpdate(sql);
@@ -78,16 +82,16 @@ public class MCEngineLogSQLite {
     }
 
     /**
-     * Closes the SQLite database connection.
+     * Closes the MySQL database connection.
      */
     public void disconnect() {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();
-                System.out.println("SQLite database connection closed.");
+                System.out.println("MySQL database connection closed.");
             }
         } catch (SQLException e) {
-            System.err.println("Failed to close SQLite database connection: " + e.getMessage());
+            System.err.println("Failed to close MySQL database connection: " + e.getMessage());
         }
     }
 

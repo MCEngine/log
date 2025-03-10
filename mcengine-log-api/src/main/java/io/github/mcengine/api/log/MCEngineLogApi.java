@@ -1,5 +1,6 @@
 package io.github.mcengine.api.log;
 
+import io.github.mcengine.api.MCEngineApiUtil;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import java.util.logging.Logger;
