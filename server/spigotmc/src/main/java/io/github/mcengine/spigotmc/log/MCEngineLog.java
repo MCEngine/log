@@ -1,5 +1,6 @@
 package io.github.mcengine.spigotmc.log;
 
+import io.github.mcengine.api.MCEngineApiUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -8,6 +9,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class MCEngineLog extends JavaPlugin {
 
+    private final MCEngineApiUtil mcengineApiUtil = new MCEngineApiUtil();
+
     /**
      * Called when the plugin is enabled.
      * This method is executed when the server starts or when the plugin is reloaded.
@@ -15,6 +18,8 @@ public class MCEngineLog extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+
+        mcengineApiUtil.saveResourceIfNotExists(this, "logs.db");
     }
 
     /**
