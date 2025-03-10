@@ -16,7 +16,11 @@ dependencies {
     
     // MySQL JDBC dependency for database interactions
     // Provides MySQL database connectivity for the plugin.
-    compileOnly 'mysql:mysql-connector-java:8.0.33'    
+    compileOnly 'mysql:mysql-connector-java:8.0.33'
+
+    // MCEngine dependency for utility function interactions
+    // Provides base functions for all MCEngine projects
+    compileOnly 'io.github.mcengine:mcengine-api:1.4.0'
 }
 
 // Configure the Shadow plugin to create a fat JAR (if the Shadow plugin is applied elsewhere)
